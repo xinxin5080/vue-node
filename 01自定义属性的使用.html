@@ -17,7 +17,7 @@
       Vue.directive('myinput',{
       // 2.0 inserted函数
       // 第一个参数el,代表DOM
-      // 第二个参数binding表示的是一个对象，对象中是一些记录自定义指令数据的信息, 重点掌握value属性，它是传入的变量的值
+      // 第二个参数binding表示的是一个对象，对象中是一些记录自定义指令数据  的信息, 重点掌握value属性，它是传入的变量的值
         inserted(el,binding){
           el.focus()
           el.style.color = binding.value

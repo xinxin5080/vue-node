@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="./node_modules/vue/dist/vue.js"></script>
   <!-- 1.1 引入axios -->
-  <script src="./node_modules/axios/dist/axios.js"></script>
+  <script src="./axios.js"></script>
   <style>
 
     #app{
@@ -88,7 +88,7 @@
       methods: {
         // 获取列表数据
         initList() {
-          axios.get('http://192.168.100.222:3000/list')
+          axios.get('http://localhost:3000/list')
           .then(res => {
             // data属性是axios内部封装
             console.log(res.data);
@@ -98,7 +98,7 @@
         },
         handleAdd() {
           // 2.1 发post请求添加数据
-          axios.post('http://192.168.100.222:3000/list', {
+          axios.post('http://localhost:3000/list', {
             id: this.newId,
             name: this.newName,
             ctime: new Date()
@@ -113,7 +113,7 @@
         },
         handleDelete(id) {
           // 3.1 调用接口
-          axios.delete('http://192.168.100.222:3000/list/' + id)
+          axios.delete('http://localhost:3000/list/' + id)
             .then(res => {
               if(res.status === 200) {
                 // 删除成功刷新数据
@@ -122,7 +122,7 @@
             })
         },
         sercheName() {
-          axios.get('http://192.168.100.222:3000/list', {
+          axios.get('http://localhost:3000/list', {
             params: {
               name: this.searchVal
             }
