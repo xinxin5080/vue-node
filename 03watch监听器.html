@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-model="name">
+    <input type="text" v-model="name2">
+    <p>姓名：{{watchData}}</p>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        name: "",
+        name2: "",
+        watchData: ''
+      },
+      // 1.监听器定义在watch属性中---一般不使用，异步的时候使用
+      watch: {
+        // 2.将监听的属性作为函数名，有两个参数，一个是新值，一个是旧值
+        name(newdata, olddata) {
+          // 3.定义一个新的变量储存，不可用return 新值+名字
+          this.watchData = newdata+this.name2
+        },
+        name2(newdata, olddata) {
+          // 3.定义一个新的变量储存，不可用return 姓+新值
+          this.watchData = this.name+newdata
+        },
+
+      }
+    })
+  </script>
+</body>
+
+</html>
