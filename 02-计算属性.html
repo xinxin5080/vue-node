@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 0.绑定 -->
+      <input type="text" v-model="name">
+      <input type="text" v-model="name2">
+      <!-- 3.使用 -->
+      <p>姓名:{{fullName}}</p>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          name:"",
+          name2:""
+        },
+        // 计算属性：根据data中已有的数据，计算得到一个新值
+        //          当data发送变化时，新的数据也发送变化
+        //          计算属性依赖缓存，难够提高渲染性能
+        //          在异步是，不可以使用计算按户型
+        
+        // 1.定义计算属性
+        computed: {
+        // 2.定义一个函数fullName,必须有返回值。这个函数当做变量使用
+        fullName(){
+          return this.name + this.name2
+        }
+        }
+      })
+    </script>
+  </body>
+</html>
