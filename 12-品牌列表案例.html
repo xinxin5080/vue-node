@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./node_modules/vue/dist/vue.js"></script>
+  <!-- 1.1 引入axios -->
+  <script src="./node_modules/axios/dist/axios.js"></script>
+  <style>
+
+    #app{
+          width:600px;
+              margin:10px auto;
+      }
+        .tb{
+            border-collapse:collapse;
+            width: 100%;
+        }
+        .tb th{
+            background-color: #0094ff;
+            color:white;
+        }
+
+        .tb td,.tb th{
+            padding:5px;
+            border:1px solid black;
+            text-align: center;
+        }
+
+        .add{
+            padding: 5px;
+            border:1px solid black;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="add">
+      编号:<input type="text" v-model="newId">
+      品牌名称:<input type="text" v-model="newName" @keydown.enter="handleAdd">
+      <input type="button" value="添加" @click="handleAdd">
+    </div>
+
+    <div class="add">
+      品牌名称:<input type="text" placeholder="请输入搜索条件" @keydown.enter="sercheName" v-model="searchVal">
+    </div>
+
+    <div>
+      <table class="tb">
+        <tr>
+          <th>编号</th>
+          <th>品牌名称</th>
+          <th>创立时间</th>
+          <th>操作</th>
+        </tr>
+        <tr v-for="(item, index) in list" :key="index">
+          <td>{{item.id}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.ctime}}</td>
+          <td>
+            <button @click="handleDelete(item.id)">删除</button>
+          </td>
+        </tr>
+        <tr v-if="list.length === 0">
+          <td colspan="4">没有品牌数据</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script>
+    let vm = new Vue({
+      el: '#app',
+      data: {
+        list: [],
+        newId: '',
+        newName: '',
+        searchVal: ''
+      },
+      // 1.2 页面一上来就去发一次请求获取数据
+      mounted () {
+        // 调用初始化表格方法
+        this.initList()
+      },
+      methods: {
+        // 获取列表数据
+        initList() {
+          axios.get('http://192.168.100.222:3000/list')
+          .then(res => {
+            // data属性是axios内部封装
+            console.log(res.data);
+            // 1.3 给list赋值
+            this.list = res.data
+          })
+        },
+        handleAdd() {
+          // 2.1 发post请求添加数据
+          axios.post('http://192.168.100.222:3000/list', {
+            id: this.newId,
+            name: this.newName,
+            ctime: new Date()
+          })
+            .then(res => {
+              // console.log(res);
+              if (res.status === 201) {
+                // 成功的话就刷新一下列表数据
+                this.initList()
+              }
+            })
+        },
+        handleDelete(id) {
+          // 3.1 调用接口
+          axios.delete('http://192.168.100.222:3000/list/' + id)
+            .then(res => {
+              if(res.status === 200) {
+                // 删除成功刷新数据
+                this.initList()
+              }
+            })
+        },
+        sercheName() {
+          axios.get('http://192.168.100.222:3000/list', {
+            params: {
+              name: this.searchVal
+            }
+          })
+            .then(res => {
+              // 将搜索的结果赋值给list
+              this.list = res.data
+              // 清空input框
+              this.searchVal = ''
+            })
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
