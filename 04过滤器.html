@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./node_modules/vue/dist/vue.js"></script>
+  <style>
+
+    #app{
+          width:600px;
+              margin:10px auto;
+      }
+        .tb{
+            border-collapse:collapse;
+            width: 100%;
+        }
+        .tb th{
+            background-color: #0094ff;
+            color:white;
+        }
+
+        .tb td,.tb th{
+            padding:5px;
+            border:1px solid black;
+            text-align: center;
+        }
+
+        .add{
+            padding: 5px;
+            border:1px solid black;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="add">
+      编号:<input type="text" v-model="newID" ref="inputRef">
+      <!-- 按enter -->
+      品牌名称:<input type="text" v-model="newData" @keydown.enter="headAdd">
+      <input type="button" value="添加" @click="headAdd">
+    </div>
+
+    <div class="add">
+      品牌名称:<input type="text" placeholder="请输入搜索条件">
+    </div>
+
+    <div>
+      <table class="tb">
+        <tr>
+          <th>编号</th>
+          <th>品牌名称</th>
+          <th>创立时间</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td colspan="4" v-if="list.length==0">没有品牌数据</td>
+        </tr>
+        <!-- 动态生成内容tr -->
+        <tr v-for="(item,index) in list" :key="index">
+          <td>{{item.id}}</td>
+          <td>{{item.title}}</td>
+          <!-- 使用过滤器 -->
+          <td>{{item.ctime | filterTime('-')}}</td>
+          <td>
+            <a href="javascript:void(0)" @click="haedDel(index)">删除</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <script>
+    // 1.0创建一个时间过滤器 Vue.filter('过滤器的名字'，一个处理函数)
+    // 这个处理函数第一个参数，默认。表示需要过滤的数据
+    // 第二个参数，是传递的参数。可以不用
+    Vue.filter('filterTime',function(t,seprator){
+      let y = t.getFullYear()
+      let m = t.getMonth()+1
+      let d = t.getDate()
+      // 2.0过滤器的处理函数，需要rutur
+      return y + seprator + m + seprator +d 
+    })
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        list: [{
+            id: 1,
+            title: 'LV',
+            ctime: new Date()
+          },
+          {
+            id: 2,
+            title: 'CC',
+            ctime: new Date()
+          },
+          {
+            id: 3,
+            title: 'CK',
+            ctime: new Date()
+          },
+        ],
+      newID:'',
+      newData:''
+      },
+      methods: {
+        // 添加
+        headAdd(){
+          // 获取输入的数据，追加到数组里(以对象的形式)
+          this.list.push({id:this.newID,title:this.newData,ctime: new Date()})
+          // 清空
+          this.newID='',
+          this.newData=''
+        },
+        // 删除
+        haedDel(index){
+          this.list.splice(index,1)
+        }
+      },
+      mounted () {
+        // 使用res实现刷新聚焦
+        // this.$refs.inputRef.focus()
+      }
+    })
+  </script>
+</body>
+
+</html>
