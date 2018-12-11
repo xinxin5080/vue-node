@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="toggle">点击切换</button>
+      <!-- 1.1 
+        给需要添加过渡动画的元素添加transtion标签，并在标签中监听以下事件
+        @before-enter="beforeEnter" // 进入前
+        @enter="enter" // 进入中
+        @after-enter="afterEnter" // 进入后
+
+        @before-leave="beforeLeave" // 离开前
+        @leave="leave" // 离开中
+        @after-leave="afterLeave" // 离开后
+
+       -->
+       <transition
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @after-enter="afterEnter"
+
+        @before-leave="beforeLeave"
+        @leave="leave"
+        @after-leave="afterLeave"
+       >
+        <div v-if="isVisible">hello</div>
+       </transition>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          isVisible: true
+        },
+        methods: {
+          toggle() {
+            this.isVisible = !this.isVisible
+          },
+          beforeEnter(el) {
+            console.log('beforeEnter');
+            el.style.paddingLeft = '100px'
+          }, 
+          enter(el, done) {
+            console.log('enter');
+            let step = 1
+            let timer = setInterval(() => {
+              el.style.paddingLeft = (100 - step)+ 'px'
+              step++
+              if (step === 100) {
+                clearInterval(timer)
+                // done回调函数在当前这个阶段执行完以后，必须调用。只有调用了，后面的函数才会顺利执行
+                done()
+              }
+            }, 10);
+          },
+          afterEnter(el) {
+            console.log('afterEnter');
+            el.style.paddingLeft = '0px'
+          }, 
+          beforeLeave(el) {
+            console.log('beforeLeave');
+          },
+          leave(el, done) {
+            console.log('leave');
+            // done回调函数在当前这个阶段执行完以后，必须调用。只有调用了，后面的函数才会顺利执行
+            done()
+          },
+          afterLeave(el) {
+            console.log('afterLeave');
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

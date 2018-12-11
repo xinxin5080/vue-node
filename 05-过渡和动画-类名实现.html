@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+    <!-- 2. 开始写6个类名 -->
+    <style>
+      /* 进入开始 */
+      .slide-enter, .slide-leave-to {
+        padding-left: 100px;
+      }
+      /* 进入中间 */
+      .slide-enter-active, .slide-leave-active {
+        transition: all 2s;
+      }
+      /* 进入结束 */
+      .slide-enter-to, .slide-leave {
+        padding-left: 0;
+      }
+      
+      /* 离开开始 */
+      /* .slide-leave {
+        padding-left: 0px;
+      } */
+      /* 离开中间 */
+      /* .slide-leave-active {
+        transition: all 2s;
+      } */
+      /* 离开结束 */
+      /* .slide-leave-to {
+        padding-left: 100px;
+      } */
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="toggle">点击切换</button>
+      <!-- 1. 将需要添加过渡动画的元素用transition标签包裹起来，然后给这个transition标签加上name属性，name属性的值会作为类名的前缀存在 -->
+      <transition name="slide">
+        <div v-if="isVisible">hello</div>
+      </transition>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          isVisible: true
+        },
+        methods: {
+          toggle() {
+            this.isVisible = !this.isVisible
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

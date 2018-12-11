@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father></father>
+    </div>
+    <script>
+      // 1.1 非父子组件间的通信需要借助于事件总线，事件总线是一个空的vue实例，它能够帮助非父子组件间通信
+      let evtbus = new Vue()
+
+      Vue.component('father', {
+        template: `
+                <div>
+                  <son></son>
+                  <daughter></daughter>
+                </div>
+        `,
+        components: {
+          son: {
+            template: `<button @click="tellSister">点击告诉妹妹我女朋友叫{{gfName}}</button>`,
+            data () {
+              return {
+                gfName: 'rose'
+              }
+            },
+            methods: {
+              tellSister() {
+                // 1.2 借助于事件总线发射自定义事件名称以及需要传递的数据
+                evtbus.$emit('emitName', this.gfName)
+              }
+            }
+          },
+          daughter: {
+            template: `<span>我哥哥告诉我他女朋友叫 {{broGfname}}</span>`,
+            mounted () {
+              // 1.3 在mounted中去监听事件。监听事件也是借助于事件总线监听。利用$on('监听的事件名称'， 回调函数) 回调函数有默认参数，这个默认参数就是发射过来的数据
+              evtbus.$on('emitName', name => {
+                console.log(name);
+                this.broGfname = name
+              })
+            },
+            data () {
+              return {
+                broGfname: '?????'
+              }
+            }
+          }
+        }
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

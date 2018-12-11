@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+    <!-- 1. 引入动画库 -->
+    <link rel="stylesheet" href="./animate.css">
+  </head>
+  <body>
+    <div id="app">
+      <button @click="toggle">点击切换</button>
+      <!-- 2. 将需要添加动画的元素使用transition标签包裹起来 -->
+      <!-- 3. 给transition添加两个属性：enter-active-class  leave-active-class -->
+      <transition
+        enter-active-class="animated fadeInUp"
+        leave-active-class="animated fadeOutDown"
+      >
+        <div v-if="isVisible">hello</div>
+      </transition>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          isVisible: true
+        },
+        methods: {
+          toggle() {
+            this.isVisible = !this.isVisible
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

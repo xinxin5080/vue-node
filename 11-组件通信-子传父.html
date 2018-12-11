@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father></father>
+    </div>
+    <script>
+      Vue.component('father', {
+        // 2.2 在父组件使用子组件的地方通过v-on指令，监听子组件发射过来的事件类型名称，监听的名称与下面子组件中定义的事件类型名字保持一致；
+        template: `
+              <div>
+                  <p>我儿子告诉我，她交往的女朋友叫{{sonGfname}}</p>
+                  <son @emitName="getSonGfname"></son>
+              </div>
+        `,
+        methods: {
+          // 2.3 监听到的事件执行函数中有一个默认参数，这个参数就代表子组件发射上来的数据
+          getSonGfname(name) {
+            console.log('父亲监听到了儿子的事件');
+            console.log(name);
+            // 2.4 赋值
+            this.sonGfname = name
+          }
+        },
+        data () {
+          return {
+            // 2.4 父组件中定义变量保存子组件传递过来的数据
+            sonGfname: '????'
+          }
+        },
+        components: {
+          son: {
+            template: `
+                    <div>
+                      <p>我刚刚交往了一个女朋友，她名字叫{{gfName}}</p>
+                      <button @click="tellFather">点击告诉爸爸我女朋友叫{{gfName}}</button>
+                    </div>
+            `,
+            data () {
+              return {
+                gfName: 'rose'
+              }
+            },
+            methods: {
+              tellFather() {
+                // 2.1 通过$emit()方法发射一个自定义事件类型，以及需要传递的数据。
+                this.$emit('emitName', this.gfName)
+              }
+            }
+          }
+        }
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

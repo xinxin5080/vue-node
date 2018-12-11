@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father></father>
+    </div>
+    <script>
+      // 1.2 创建son组件的配置对象
+      // let son = {
+      //   template: '<div>我是儿子组件</div>'
+      // }
+      // 1.1 创建一个father全局组件，现在希望在father组件内部有一个son组件，并且这个son组件只能在father中使用
+      Vue.component('father', {
+        // 1.4 使用局部组件，只能在父组件的模板中使用
+        template: `
+                <div>
+                  <h1>这是father组件</h1>
+                  <son/>
+                </div>
+        `,
+        // 1.3 在父组件中，通过components属性，将son组件的配置对象拿进来，创建一个局部的组件,这个局部组件，只能father组件中使用
+        components: {
+          son: {
+            template: '<div>我是儿子组件</div>'
+          }
+        }
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 1.3.1 使用组件，就像使用html标签一样 -->
+      <!-- 1.3.2 使用组件也可以使用单标签-->
+      <my-header></my-header>
+      <my-header/>
+    </div>
+    <script>
+      // 1.1 创建全局组件利用Vue.component()方法，该方法提供两个参数：第一个代表组件的名字；第二个代表组件的配置对象；
+      // 注意组件名字的命名，可以全小写，可以驼峰命名，可以连字符号。
+      // ⭐如果是驼峰命名，那么在时候的时候，记得改成连字符。比如MyHeader --->  <my-header></my-header>
+
+      Vue.component('my-header', {
+        // 1.2 通过template属性书写组件的html代码
+        // 注意：这个template属性中的html模板代码，只能包含一个根节点⭐
+        template: `
+            <ul>
+              <li>首页</li>
+              <li>动态</li>
+              <li>小册</li>
+            </ul>
+        `
+      })
+      
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>
