@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./vue2.js"></script>
+  <!-- 1.1 引入路由文件 -->
+  <script src="./vue-router.js"></script>
+  <script src="./axios.js"></script>
+  <style>
+    li {
+      float: left;
+      list-style: none;
+      margin-right: 30px;
+    }
+
+    ul {
+      overflow: hidden;
+    }
+
+    .box {
+      border: 2px solid pink;
+    }
+    .product {
+      border: 1px solid blueviolet;
+      margin: 20px;
+    }
+    .book {
+      border: 1px solid blue;
+      margin: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <div class="box">
+      <ul>
+        <li>
+          <router-link to="/home">首页</router-link>
+        </li>
+        <li>
+          <router-link to="/product/11">蔬菜</router-link>
+        </li>
+        <li>
+          <router-link to="/product/22">水果</router-link>
+        </li>
+        <li>
+          <router-link to="/product/33">肉类</router-link>
+        </li>
+      </ul>
+      <router-view></router-view>
+    </div>
+  </div>
+  <script>
+    let cookBookCom = Vue.component('book', {
+      template: `
+          <div class="book">番茄炒鸡蛋，鸡蛋炒番茄，番茄鸡蛋汤。。。。。。。</div>
+      `
+    })
+    let homeCom = Vue.component('home', {
+      template: '<div>欢迎来到商城首页</div>'
+    })
+    let productCom = Vue.component('product', {
+      template: `
+            <div class="product">
+              <p>这是商品分类,该分类的id是：{{$route.params.pid}}</p>
+              <ul>
+                <li v-for="(item, index) in list" :key="index">{{item}}</li>
+              </ul>
+              <button @click="viewCookbook">查看菜谱</button>
+              <router-view></router-view>
+            </div>
+      `,
+      methods: {
+        viewCookbook() {
+          this.$router.push({name: 'bookPage'})
+        }
+      },
+      data() {
+        return {
+          list: []
+        }
+      },
+      watch: {
+        '$route': {
+          handler(to, from) {
+            let pid = to.params.pid;
+            axios.get('http://localhost:3000/list/' + pid)
+              .then(res => {
+                console.log(res.data);
+                this.list = res.data.products
+              })
+          },
+          immediate: true
+        }
+      },
+    })
+    let router = new VueRouter({
+      routes: [{
+          name: 'homePage',
+          path: '/home',
+          component: homeCom
+        },
+        {
+          name: 'productPage',
+          path: '/product/:pid',
+          component: productCom,
+          children: [
+            {name: 'bookPage', path: 'book', component: cookBookCom}
+          ]
+        },
+        {
+          name: 'default',
+          // * 表示所有，意思就是如果页面访问的路径没有匹配到上面的任何一个，那剩下的所有路由规则都走下面这条规则
+          path: '*',
+          // 通过redict属性实现重定向
+          redirect: {name: 'homePage'}
+        }
+      ]
+    })
+    var vm = new Vue({
+      el: '#app',
+      router,
+      data: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./vue2.js"></script>
+  <!-- 1.1 引入路由文件 -->
+  <script src="./vue-router.js"></script>
+  <style>
+    li {
+      float: left;
+      list-style: none;
+      margin-right: 30px;
+    }
+    ul {
+      overflow: hidden;
+    }
+    .box {
+      border: 2px solid pink;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <div class="box">
+      <ul>
+        <li><router-link to="/home">首页</router-link></li>
+        <li><router-link to="/product/11">蔬菜</router-link></li>
+        <li><router-link to="/product/22">水果</router-link></li>
+        <li><router-link to="/product/33">肉类</router-link></li>
+      </ul>
+      <router-view></router-view>
+    </div>
+  </div>
+  <script>
+    let homeCom = Vue.component('home', {
+      template: '<div>欢迎来到商城首页</div>'
+    })
+    let productCom = Vue.component('product', {
+      // 2.2 在页面中要获取路由参数，通过$route.params.参数名 来获取
+      // $route表示当前页面的路由对象 ⭐
+      template: `
+            <div>这是商品分类,该分类的id是：{{$route.params.pid}}</div>
+      `,
+      mounted () {
+        console.log(this.$route.params.pid);
+      }
+    })
+    let routerObj = new VueRouter({
+      routes: [
+        {name: 'homePage', path: '/home', component: homeCom},
+        // 2.1 通过 冒号+参数名  定义一个路由参数
+        {name: 'productPage', path: '/product/:pid', component: productCom},
+      ]
+    })
+    var vm = new Vue({
+      el: '#app',
+      router: routerObj,
+      data: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

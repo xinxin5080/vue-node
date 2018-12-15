@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Document</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <script src="./vue2.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <father></father>
+        </div>
+        <script>
+            // 创建一个空的vue实例来通信 - 事件总线
+            let evtbus = new Vue();
+            // 父
+            Vue.component("father", {
+                template:`
+                        <div>
+                            <son></son>
+                            <daughter></daughter>
+                        </div>
+                    `,
+                // 子：里面有儿子和女儿
+                components: {
+                    // 哥哥
+                    son: {
+                        template: `<h2>我要向妹妹传递{{money}}钱</h2>`,
+                        data () {
+                            return {
+                                money: "8888"
+                            }
+                        },
+                        // methods: {
+                        //     hanshu(){
+                        //         evtbus.$emit("broMoney",this.money)
+                        //     }
+                        // },
+                        mounted () {
+                            console.log(1);
+                            evtbus.$emit("broMoney",this.money)
+                        }
+                    },
+                    // 妹妹
+                    daughter: {
+                        template: `<p>接收到哥哥的{{getMoney}}钱</p>`,
+                        data () {
+                            return {
+                                getMoney: "???"
+                            }
+                        },
+                        created () {
+                            console.log(2);
+                            evtbus.$on("broMoney", name => {
+                                this.getMoney = name
+                            })
+                        }
+                    }
+                }
+            })
+
+            var vm = new Vue({
+                el: '#app',
+                data: {
+
+                }
+            })
+        </script>
+    </body>
+</html>

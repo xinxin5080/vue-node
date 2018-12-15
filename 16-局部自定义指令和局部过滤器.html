@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father></father>
+    </div>
+    <script>
+
+      // Vue.directive('myfocus', {
+      //   inserted(el) {}
+      // })
+      // Vue.filter('fmtTime', function(time){})
+      Vue.component('one', {
+        template: `
+            <div>
+              <input type="text">
+              <p>one</p>
+              <p>{{time1 | fmtTime}}</p>
+            </div>
+        `,
+        data () {
+          return {
+            time1: new Date()
+          }
+        },
+        // 创建局部自定义指令通过directives属性创建;局部自定义指令在哪个组件创建，就只能在那个组件使用
+        directives: {
+          myfocus: {
+            inserted(el) {
+              el.focus()
+            }
+          }
+        },
+        // 创建局部过滤器通过filters
+        filters: {
+          fmtTime(time) {
+            let y = time.getFullYear()
+            return y + '年'
+          }
+        }
+      })
+      Vue.component('two', {
+        template: `
+            <div>
+              <input type="text">
+              <p>two</p>
+              <p>{{time1}}</p>
+            </div>
+        `,
+        data () {
+          return {
+            time1: new Date()
+          }
+        },
+      })
+      Vue.component('father', {
+        template: `
+            <div>
+              <one></one>
+              <two></two>
+            </div>
+        `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

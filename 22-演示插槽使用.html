@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <myheader></myheader>
+      <myheader>
+        <input type="text" slot="search">
+      </myheader>
+      <myheader>
+        <img src="./logo.png" alt="" slot="logo">
+      </myheader>
+    </div>
+    <script>
+      Vue.component('myheader', {
+        template: `
+              <div>
+                <slot name="logo"></slot>
+                <span>
+                  <span>首页</span>
+                  <span>动态</span>
+                  <span>小册</span>
+                </span>
+                <slot name="search"></slot>
+                <span>
+                  <button>登录</button>
+                  <button>注册</button>
+                </span>
+              </div>
+        `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

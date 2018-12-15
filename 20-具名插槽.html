@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father>
+        <!-- 1.2 给标签添加slot属性，slot属性的值与下面的name属性的值对应，就表示把这段内容插入到哪个坑里面 -->
+        <h1 slot="hw">我买了一个华为手机</h1>
+        <h6 slot="xm">我买了一个小米手机</h6>
+      </father>
+    </div>
+    <script>
+      Vue.component('father', {
+        // 1.1 具名插槽首先需要给slot组件指定一个name属性，也就是给插槽取名字
+        template: `
+              <div>
+                <h1>父组件</h1>
+                <div class="huaiwei">
+                  <slot name="hw"></slot>
+                </div>
+                <div class="xiaomi">
+                  <slot name="xm"></slot>
+                </div>
+              </div>
+        `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

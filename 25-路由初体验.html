@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./vue2.js"></script>
+  <!-- 1.1 引入路由文件 -->
+  <script src="./vue-router.js"></script>
+  <style>
+    li {
+      float: left;
+      list-style: none;
+      margin-right: 30px;
+    }
+    ul {
+      overflow: hidden;
+    }
+    .box {
+      border: 2px solid pink;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <div class="box">
+      <ul>
+        <!-- 1.7 要在页面上做路由跳转，需要使用router-link组件。这个组件将来会被渲染成a标签。它有一个to属性，表示需要跳转到的路径，这个路径必须和下面定义路由规则的path一一对应 -->
+        <li><router-link to="/home">首页</router-link></li>
+        <li><router-link to="/product">蔬菜</router-link></li>
+        <li><router-link to="/product">水果</router-link></li>
+        <li><router-link to="/product">肉类</router-link></li>
+      </ul>
+      <!-- 1.6 通过router-view组件来存放路由匹配到的组件 -->
+      <router-view></router-view>
+    </div>
+  </div>
+  <script>
+    // 1.2 创建路由所需要的组件
+    // 首页组件
+    let homeCom = Vue.component('home', {
+      template: '<div>欢迎来到商城首页</div>'
+    })
+    //  商品分类组件
+    let productCom = Vue.component('product', {
+      template: `
+            <div>这是商品分类</div>
+      `
+    })
+    // 1.3 通过VueRouter构造函数，创建路由实例
+    let routerObj = new VueRouter({
+      // mode: 'history', 开启history模式，不带# 锚点，但是需要后台支持
+      // 1.4 给路由实例中添加路由配置。配置路由通过routes属性配置，它是一个数组，数组中放的是一个一个的路由对象，路由对象中包含 name 给路由规则取名字、 path 路径、 component 匹配路径所对应的组件
+      routes: [
+        {name: 'homePage', path: '/home', component: homeCom},
+        {name: 'productPage', path: '/product', component: productCom},
+      ]
+    })
+    var vm = new Vue({
+      el: '#app',
+      // 1.5 将路由对象注入到vue实例中，让整个vue应用程序拥有路由
+      router: routerObj,
+      data: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./vue2.js"></script>
+  <!-- 1.1 引入路由文件 -->
+  <script src="./vue-router.js"></script>
+  <script src="./axios.js"></script>
+  <style>
+    li {
+      float: left;
+      list-style: none;
+      margin-right: 30px;
+    }
+
+    ul {
+      overflow: hidden;
+    }
+
+    .box {
+      border: 2px solid pink;
+    }
+    .product {
+      border: 1px solid blueviolet;
+      margin: 20px;
+    }
+    .book {
+      border: 1px solid blue;
+      margin: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <div class="box">
+      <ul>
+        <li>
+          <router-link to="/home">首页</router-link>
+        </li>
+        <li>
+          <router-link to="/product/11">蔬菜</router-link>
+        </li>
+        <li>
+          <router-link to="/product/22">水果</router-link>
+        </li>
+        <li>
+          <router-link to="/product/33">肉类</router-link>
+        </li>
+      </ul>
+      <router-view></router-view>
+    </div>
+  </div>
+  <script>
+    let cookBookCom = Vue.component('book', {
+      template: `
+          <div class="book">番茄炒鸡蛋，鸡蛋炒番茄，番茄鸡蛋汤。。。。。。。</div>
+      `
+    })
+    let homeCom = Vue.component('home', {
+      template: '<div>欢迎来到商城首页</div>'
+    })
+    let productCom = Vue.component('product', {
+      // 1.3 定义子路由的坑
+      template: `
+            <div class="product">
+              <p>这是商品分类,该分类的id是：{{$route.params.pid}}</p>
+              <ul>
+                <li v-for="(item, index) in list" :key="index">{{item}}</li>
+              </ul>
+              <button @click="viewCookbook">查看菜谱</button>
+              <router-view></router-view>
+            </div>
+      `,
+      methods: {
+        viewCookbook() {
+          // 编程式导航，也就是通过js代码跳转 this.$router.push()
+          // $router表示的是整个的路由对象
+          // console.log(this.$router);
+
+          // 跳转方式有以下几种
+          // this.$router.push('/home')
+          // this.$router.push({name: 'homePage'})
+          // this.$router.push({path: '/home'})
+
+          // 1.2 
+          this.$router.push({name: 'bookPage'})
+          // this.$router.push('/product/' + this.$route.params.pid + '/book')
+        }
+      },
+      data() {
+        return {
+          list: []
+        }
+      },
+      watch: {
+        '$route': {
+          handler(to, from) {
+            let pid = to.params.pid;
+            axios.get('http://localhost:3000/list/' + pid)
+              .then(res => {
+                console.log(res.data);
+                this.list = res.data.products
+              })
+          },
+          immediate: true
+        }
+      },
+    })
+    let routerObj = new VueRouter({
+      routes: [{
+          name: 'homePage',
+          path: '/home',
+          component: homeCom
+        },
+        {
+          name: 'productPage',
+          path: '/product/:pid',
+          component: productCom,
+          // 1.1 子路由（嵌套路由）通过children属性实现,children是一个数组，数组里面放的也是路由对象，里面也是path/name/component这些属性，注意一点，就是path前面不能加 / ⭐
+          children: [
+            {name: 'bookPage', path: 'book', component: cookBookCom}
+          ]
+        },
+      ]
+    })
+    var vm = new Vue({
+      el: '#app',
+      router: routerObj,
+      data: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

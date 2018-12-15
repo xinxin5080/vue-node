@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father>
+        <h1>我买了一个华为手机</h1>
+      </father>
+    </div>
+    <script>
+      Vue.component('father', {
+        // 默认插槽通过slot创建
+        template: `
+              <div>
+                <h1>父组件</h1>
+                <slot></slot>
+              </div>
+        `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>

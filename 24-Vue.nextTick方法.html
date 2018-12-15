@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <p id="mymsg">{{msg}}</p>
+      <button @click="changeMsg">改变msg</button>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          msg: 'hello world'
+        },
+        methods: {
+          changeMsg() {
+            // 这里this.msg = 'hello itcast'它是一个异步操作，导致下面document.getElementById('mymsg').innerHTML拿到的值不是更改之后的值。
+            // 解决方式，借助于Vue.nextTick(回调函数)。它的作用是等到数据更新完成之后，再去执行回调函数里面的内容
+            this.msg = 'hello itcast'
+            // Vue.nextTick(() => {
+            //   console.log(document.getElementById('mymsg').innerHTML);
+            // })
+            this.$nextTick(() => {
+              console.log(document.getElementById('mymsg').innerHTML);
+            })
+
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

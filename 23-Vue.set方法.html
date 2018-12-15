@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h3>{{user.name}}</h3>
+      <h3>{{user.age}}</h3>
+      <h3>{{user.sex}}</h3>
+      <button @click="addSex">点击给user增加一个sex属性</button>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          user: {
+            name: 'jack',
+            age: 19
+          }
+        },
+        methods: {
+          addSex() {
+            // 通过下面这种方式设置的属性，不是响应式数据。如果想要添加响应式数据，需要使用Vue.set()方法
+            // this.user.sex = '男'
+
+            // Vue.set(this.user, 'sex', '男')
+            this.$set(this.user, 'sex', '男')
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

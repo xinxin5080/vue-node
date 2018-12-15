@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./vue2.js"></script>
+  <!-- 1.1 引入路由文件 -->
+  <script src="./vue-router.js"></script>
+  <script src="./axios.js"></script>
+  <style>
+    li {
+      float: left;
+      list-style: none;
+      margin-right: 30px;
+    }
+
+    ul {
+      overflow: hidden;
+    }
+
+    .box {
+      border: 2px solid pink;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <div class="box">
+      <ul>
+        <li>
+          <router-link to="/home">首页</router-link>
+        </li>
+        <li>
+          <router-link to="/product/11">蔬菜</router-link>
+        </li>
+        <li>
+          <router-link to="/product/22">水果</router-link>
+        </li>
+        <li>
+          <router-link to="/product/33">肉类</router-link>
+        </li>
+      </ul>
+      <router-view></router-view>
+    </div>
+  </div>
+  <script>
+    let homeCom = Vue.component('home', {
+      template: '<div>欢迎来到商城首页</div>'
+    })
+    let productCom = Vue.component('product', {
+      template: `
+            <div>
+              <p>这是商品分类,该分类的id是：{{$route.params.pid}}</p>
+              <ul>
+                <li v-for="(item, index) in list" :key="index">{{item}}</li>
+              </ul>
+            </div>
+      `,
+      data() {
+        return {
+          list: []
+        }
+      },
+      // 3.1 监听路由参数的变化
+      watch: {
+        // to表示将要去的路由对象， from表示从哪个路由对象离开
+        '$route': {
+          handler(to, from) {
+            // console.log(to);
+            // console.log(from);
+            let pid = to.params.pid;
+            axios.get('http://localhost:3000/list/' + pid)
+              .then(res => {
+                console.log(res.data);
+                this.list = res.data.products
+              })
+          },
+          immediate: true
+        }
+      },
+      // mounted() {
+      //   let pid = this.$route.params.pid;
+      //   axios.get('http://localhost:3000/list/' + pid)
+      //     .then(res => {
+      //       console.log(res.data);
+      //       this.list = res.data.products
+      //     })
+      // }
+    })
+    let routerObj = new VueRouter({
+      routes: [{
+          name: 'homePage',
+          path: '/home',
+          component: homeCom
+        },
+        {
+          name: 'productPage',
+          path: '/product/:pid',
+          component: productCom
+        },
+      ]
+    })
+    var vm = new Vue({
+      el: '#app',
+      router: routerObj,
+      data: {
+
+      }
+    })
+  </script>
+</body>
+
+</html>

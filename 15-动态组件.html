@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+    <style>
+      li {
+        float: left;
+        padding-right: 30px;
+      }
+      ul {
+        overflow: hidden;
+      }
+      .slide-enter, .slide-leave-to {
+        padding-left: 100px;
+      }
+      /* 进入中间 */
+      .slide-enter-active, .slide-leave-active {
+        transition: all 2s;
+      }
+      /* 进入结束 */
+      .slide-enter-to, .slide-leave {
+        padding-left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li @click="currentCom='shoe'">鞋子</li>
+        <li @click="currentCom='pants'">休闲裤</li>
+        <li @click="currentCom='clothes'">羽绒服</li>
+      </ul>
+      <!-- 
+        动态组件需要借助于内置的component组件，利用的is属性实现，is属性的值是哪个组件，那这个component就会渲染成哪个组件
+       -->
+       <transition name="slide" mode="out-in">
+         <component :is="currentCom"></component>
+       </transition>
+      </div>
+    <script>
+      // 动态组件就是可以动态替换的组件。
+
+      Vue.component('shoe', {
+        template: `<div>鞋子组件</div>`
+      })
+      Vue.component('pants', {
+        template: `<div>裤子组件</div>`
+      })
+      Vue.component('clothes', {
+        template: `<div>羽绒服组件</div>`
+      })
+
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          currentCom: 'shoe'
+        }
+      })
+    </script>
+  </body>
+</html>

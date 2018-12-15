@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./vue2.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <father>
+        <!-- 1.1 通过slot-scope属性，获取到slot中定义的属性值，将他们保存到一个对象。这个对象就是slot-scope这个属性的值 -->
+        <h1 slot-scope="obj">我买了一个华为手机, 它的插槽的type是：{{obj.type}}, 它的使用范围是：{{obj.use}}</h1>
+      </father>
+    </div>
+    <script>
+      Vue.component('father', {
+        // 如果想要把下面slot组件中定义的属性值取出来，就需要用到作用域插槽
+        template: `
+              <div>
+                <h1>父组件</h1>
+                <div class="huaiwei">
+                  <slot type="usb3.0" use="phone,battery,camera"></slot>
+                </div>
+              </div>
+        `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+      })
+    </script>
+  </body>
+</html>
